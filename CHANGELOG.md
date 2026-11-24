@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.1.0-rc1 (unreleased)
+## 1.1.0-rc2 (unreleased)
+
+- Fixed a crash on "Sign in from browser extension…": the cookie
+  receiver's status widget passed `face = nil` to `TextBoxWidget`
+  instead of a real font face, which made KOReader's text renderer index
+  a nil value. Found via `crash.log` after a real on-device test.
+
+## 1.1.0-rc1
 
 Testing build — no functional change from 1.0.0's code; this tag exists
 to mark the round of live testing on real hardware.

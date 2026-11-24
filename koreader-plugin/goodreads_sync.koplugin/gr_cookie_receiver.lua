@@ -22,6 +22,7 @@ local VerticalGroup = require("ui/widget/verticalgroup")
 local VerticalSpan = require("ui/widget/verticalspan")
 local TextBoxWidget = require("ui/widget/textboxwidget")
 local Button = require("ui/widget/button")
+local Font = require("ui/font")
 local Size = require("ui/size")
 local Screen = require("device").screen
 local Blitbuffer = require("ffi/blitbuffer")
@@ -134,15 +135,17 @@ local ReceiverWidget = InputContainer:extend{}
 function ReceiverWidget:init()
     local pad = Size.padding.large
     local text_width = math.floor(Screen:getWidth() * 0.8)
-    self.status_box = TextBoxWidget:new{ text = self.status_text or "", width = text_width, face = self.text_face }
+    local title_face = Font:getFace("tfont", 20)
+    local text_face = Font:getFace("cfont", 18)
+    self.status_box = TextBoxWidget:new{ text = self.status_text or "", width = text_width, face = text_face }
     local group = VerticalGroup:new{
         align = "left",
-        TextBoxWidget:new{ text = _("Receive Goodreads cookie"), width = text_width, bold = true, face = self.title_face },
+        TextBoxWidget:new{ text = _("Receive Goodreads cookie"), width = text_width, bold = true, face = title_face },
         VerticalSpan:new{ width = Size.span.vertical_large },
-        TextBoxWidget:new{ text = _("Open the Goodreads sync browser extension on your computer and enter:"), width = text_width, face = self.text_face },
+        TextBoxWidget:new{ text = _("Open the Goodreads sync browser extension on your computer and enter:"), width = text_width, face = text_face },
         VerticalSpan:new{ width = Size.span.vertical_default },
-        TextBoxWidget:new{ text = T(_("Address: %1"), self.address), width = text_width, bold = true, face = self.text_face },
-        TextBoxWidget:new{ text = T(_("Code: %1"), self.code), width = text_width, bold = true, face = self.text_face },
+        TextBoxWidget:new{ text = T(_("Address: %1"), self.address), width = text_width, bold = true, face = text_face },
+        TextBoxWidget:new{ text = T(_("Code: %1"), self.code), width = text_width, bold = true, face = text_face },
         VerticalSpan:new{ width = Size.span.vertical_default },
         self.status_box,
         VerticalSpan:new{ width = Size.span.vertical_large },
