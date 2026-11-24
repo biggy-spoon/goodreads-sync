@@ -312,6 +312,13 @@ function GoodreadsSync:onPageUpdate(pageno)
     self._pages_since_push = 0
     local doc = self.ui and self.ui.document
     if not (doc and pageno) then return end
+    -- Signing in can happen after onReaderReady already ran (e.g. mid-session
+    -- via the browser extension), which is the only other place a book gets
+    -- linked and shelved; retry that here too so a late sign-in isn't stuck
+    -- until the book is closed and reopened.
+    local path = doc.file
+    local link = GRSettings:getBook(path)
+    if not (link and link.book_id) then self:pushCurrentlyReading() end
     local ok, page_count = pcall(function() return doc:getPageCount() end)
     if not (ok and page_count and page_count > 0) then return end
     local percent = pageno / page_count * 100

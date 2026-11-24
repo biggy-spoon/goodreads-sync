@@ -1,6 +1,18 @@
 # Changelog
 
-## 1.1.0-rc10 (unreleased)
+## 1.1.0-rc11 (unreleased)
+
+- Fixed progress sync staying stuck forever if you sign in to Goodreads
+  *after* a book is already open: linking a book to Goodreads and
+  shelving it only happened once, in `onReaderReady` (fired once at
+  open). If sign-in hadn't happened yet at that point, the book was
+  never linked, and every later `onPageUpdate` push silently no-opped
+  since it requires an existing link. `onPageUpdate` now also retries
+  the link/shelve step (cheaply, since it no-ops once already linked),
+  so a late sign-in self-heals within a page-turn interval or two
+  instead of needing the book closed and reopened.
+
+## 1.1.0-rc10
 
 - Fixed the extension still being blocked by its own `connect-src`
   policy after the rc9 fix: a CSP source expression that omits a port
