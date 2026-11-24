@@ -1,6 +1,20 @@
 # Changelog
 
-## 1.1.0-rc8 (unreleased)
+## 1.1.0-rc9 (unreleased)
+
+- Fixed the browser extension failing with a CORS/network error on
+  Firefox ("Content-Security-Policy: Upgrading insecure request...").
+  Firefox's default extension CSP was upgrading the `http://` request to
+  the e-reader to `https://`; since the e-reader's cookie receiver only
+  speaks plain HTTP, that handshake failed before any response came
+  back, which surfaced as a generic CORS failure. Added an explicit
+  `content_security_policy` to `browser-extension/manifest.json` with a
+  `connect-src` that allows plain `http://`, replacing whatever default
+  policy was causing the upgrade. Browser-extension-only change — no
+  koplugin files changed, so nothing new needs reinstalling on the
+  e-reader for this one.
+
+## 1.1.0-rc8
 
 - Fixed the cookie-receiver panel leaving e-ink ghosting behind after
   pressing Stop: `onStop` called `UIManager:close(self)` with no refresh

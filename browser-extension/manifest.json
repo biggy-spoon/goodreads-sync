@@ -1,10 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Goodreads sync cookie sender",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sends your goodreads.com session cookie to the Goodreads sync KOReader plugin on your e-reader, over your local Wi-Fi network.",
   "permissions": ["cookies", "storage"],
   "host_permissions": ["https://www.goodreads.com/*", "http://*/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://* https://*"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Send Goodreads cookie to e-reader"
