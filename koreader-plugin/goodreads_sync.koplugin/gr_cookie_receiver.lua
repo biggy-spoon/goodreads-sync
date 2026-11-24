@@ -199,6 +199,7 @@ function Receiver.open(on_saved)
     }
     if not server then
         UIManager:show(widget)
+        UIManager:forceRePaint()
         return widget
     end
     server:settimeout(0)
@@ -238,6 +239,7 @@ function Receiver.open(on_saved)
     end)
 
     UIManager:show(widget)
+    UIManager:forceRePaint()
     return widget
 end
 

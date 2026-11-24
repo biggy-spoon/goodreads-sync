@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.1.0-rc2 (unreleased)
+## 1.1.0-rc3 (unreleased)
+
+- Fixed the cookie-receiver panel not appearing until the next screen
+  refresh (e.g. after a sleep/wake cycle): `Receiver.open` now calls
+  `UIManager:forceRePaint()` right after showing the widget, instead of
+  relying on some later redraw to flush it to the e-ink screen.
+
+## 1.1.0-rc2
 
 - Fixed a crash on "Sign in from browser extension…": the cookie
   receiver's status widget passed `face = nil` to `TextBoxWidget`
