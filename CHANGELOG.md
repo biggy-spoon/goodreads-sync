@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.1.0-rc4 (unreleased)
+## 1.1.0-rc5 (unreleased)
+
+- Fixed the cookie-receiver panel rendering invisible (though still
+  tappable — closing it worked, nothing else did): `ReceiverWidget` never
+  set `self.dimen`, which UIManager needs to know what screen region to
+  actually paint/refresh. Gesture hit-testing doesn't need it (it walks
+  the widget tree directly), which is why taps still worked while nothing
+  was visible. Added `self.dimen = self[1]:getSize()`, matching the
+  pattern KOReader's own full-screen widgets use.
+
+## 1.1.0-rc4
 
 - Fixed the cookie-receiver freezing KOReader entirely: `Receiver.open`
   called a blocking `os.execute("iptables ...")` to open the Kindle's

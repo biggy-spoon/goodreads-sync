@@ -158,6 +158,11 @@ function ReceiverWidget:init()
             group,
         },
     }
+    -- UIManager uses this (not just self[1]'s own size) to know what
+    -- screen region to actually paint/refresh; without it, taps still
+    -- land correctly (gesture hit-testing walks the widget tree
+    -- directly) but nothing visible gets drawn.
+    self.dimen = self[1]:getSize()
 end
 
 function ReceiverWidget:setStatus(text)
