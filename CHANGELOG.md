@@ -1,6 +1,17 @@
 # Changelog
 
-## 1.1.0-rc5 (unreleased)
+## 1.1.0-rc6 (unreleased)
+
+- Fixed the cookie-receiver panel still appearing invisible after the
+  self.dimen fix: the "Sign in from browser extension…" and "Sign in by
+  pasting a cookie…" menu entries had `keep_menu_open = true`, which
+  keeps KOReader's touch menu open on top after tapping. The panel was
+  likely being drawn underneath the still-open menu; what looked like
+  tapping its Stop button was probably the outer menu dismissing itself
+  on an outside tap. Removed `keep_menu_open` from both entries, since
+  neither is a toggle that needs the menu to stay open.
+
+## 1.1.0-rc5
 
 - Fixed the cookie-receiver panel rendering invisible (though still
   tappable — closing it worked, nothing else did): `ReceiverWidget` never

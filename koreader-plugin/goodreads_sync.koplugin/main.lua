@@ -329,12 +329,10 @@ function GoodreadsSync:addToMainMenu(menu_items)
         sub_item_table = {
             {
                 text_func = function() return GRSettings:hasCookie() and _("Signed in (paste cookie again)") or _("Sign in by pasting a cookie…") end,
-                keep_menu_open = true,
                 callback = function() self:signIn() end,
             },
             {
                 text = _("Sign in from browser extension…"),
-                keep_menu_open = true,
                 callback = function() self:receiveFromBrowser() end,
             },
             {
