@@ -86,14 +86,17 @@ end
 -- ------------------------------------------------------------- book link
 
 -- Finds (or asks the user to pick) the Goodreads book for the currently
--- open document, and remembers the choice. Returns the stored link, or
--- nil if the user had nothing to pick from or cancelled.
+-- open document, and remembers the choice. `callback(link, path)` may run
+-- much later (after a search, or after the reader picks from a list), by
+-- which point the book may have been closed - so `path` is the one
+-- resolved here at the start, not something to re-read from
+-- self.ui.document inside callback (it may be nil by then).
 function GoodreadsSync:ensureLinked(callback)
     local doc = self.ui and self.ui.document
     if not doc then return end
     local path = doc.file
     local link = GRSettings:getBook(path)
-    if link and link.book_id then return callback(link) end
+    if link and link.book_id then return callback(link, path) end
 
     local props = self.ui.doc_props or {}
     local title = props.title or ""
@@ -113,7 +116,7 @@ function GoodreadsSync:ensureLinked(callback)
             local saved = GRSettings:setBook(path, {
                 book_id = results[1].book_id, title = results[1].title, authors = results[1].authors,
             })
-            return callback(saved)
+            return callback(saved, path)
         end
         self:chooseBook(path, results, callback)
     end)
@@ -128,7 +131,7 @@ function GoodreadsSync:chooseBook(path, results, callback)
             callback = function()
                 UIManager:close(self._choose_dialog)
                 local saved = GRSettings:setBook(path, { book_id = r.book_id, title = r.title, authors = r.authors })
-                callback(saved)
+                callback(saved, path)
             end,
         }}
     end
@@ -150,9 +153,8 @@ end
 -- reader is asked before anything is touched.
 function GoodreadsSync:pushCurrentlyReading()
     if not GRSettings:hasCookie() then return end
-    self:ensureLinked(function(link)
+    self:ensureLinked(function(link, path)
         if link.shelf == "currently-reading" or link.shelf == "read" then return end
-        local path = self.ui.document.file
         NetworkMgr:runWhenOnline(function()
             local remote_shelf = api():currentShelf(link.book_id)
             if remote_shelf and remote_shelf ~= "to-read" and remote_shelf ~= "currently-reading" then
@@ -207,9 +209,8 @@ end
 
 function GoodreadsSync:pushFinished()
     if not GRSettings:hasCookie() then return end
-    self:ensureLinked(function(link)
+    self:ensureLinked(function(link, path)
         if link.shelf == "read" then return end
-        local path = self.ui.document.file
         NetworkMgr:runWhenOnline(function()
             if not api():addToShelf(link.book_id, "read") then return end
             GRSettings:setBook(path, { shelf = "read" })

@@ -1,6 +1,18 @@
 # Changelog
 
-## 1.1.0-rc11 (unreleased)
+## 1.1.0-rc12 (unreleased)
+
+- Fixed a crash ("attempt to index field 'document' (a nil value)") in
+  `pushCurrentlyReading`/`pushFinished`: both re-read
+  `self.ui.document.file` *inside* an `ensureLinked` callback that can
+  fire a real delay later (after a network search, or after the reader
+  picks from a multi-match list) - if the book had been closed by then,
+  `self.ui.document` was already nil. `ensureLinked` now resolves the
+  path once up front and threads it through the whole async chain as a
+  second callback argument (`callback(link, path)`), instead of any
+  later code re-reading `self.ui.document`.
+
+## 1.1.0-rc11
 
 - Fixed progress sync staying stuck forever if you sign in to Goodreads
   *after* a book is already open: linking a book to Goodreads and
