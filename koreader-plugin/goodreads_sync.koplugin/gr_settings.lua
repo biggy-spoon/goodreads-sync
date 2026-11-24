@@ -5,6 +5,7 @@
 
 local LuaSettings = require("luasettings")
 local DataStorage = require("datastorage")
+local GRUtil = require("gr_util")
 
 local GRSettings = {}
 local store
@@ -50,8 +51,7 @@ end
 function GRSettings:setBook(path, fields)
     local s = open()
     local books = s:readSetting("books") or {}
-    local entry = books[path] or {}
-    for k, v in pairs(fields) do entry[k] = v end
+    local entry = GRUtil.mergeFields(books[path], fields)
     books[path] = entry
     s:saveSetting("books", books):flush()
     return entry

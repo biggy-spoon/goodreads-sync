@@ -20,6 +20,8 @@ for exactly what it calls.
   extension that reads your goodreads.com cookies and sends them to the
   plugin over your local network, so you don't have to type a long cookie
   on an e-ink keyboard.
+- [`tests/`](tests) — unit tests for the plugin's pure logic (cookie
+  cleaning, encoding, scraping, clamping); see [tests/README.md](tests/README.md).
 
 ## Features
 
@@ -64,6 +66,16 @@ for exactly what it calls.
 
 Either way, the cookie eventually expires; repeat the steps above when
 pushes silently stop working.
+
+## Tests
+
+```sh
+lua tests/run_tests.lua
+```
+
+Unit tests for the plugin's pure logic, runnable with any plain Lua
+interpreter — see [tests/README.md](tests/README.md) for what they cover
+and don't.
 
 ## Limitations
 
