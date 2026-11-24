@@ -64,6 +64,10 @@ local function respond(client, status, reason, obj)
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Methods: POST, OPTIONS",
         "Access-Control-Allow-Headers: Content-Type",
+        -- Chrome's Private Network Access check blocks a request to a
+        -- local-network address (like 192.168.x.x) unless the preflight
+        -- response says this is expected.
+        "Access-Control-Allow-Private-Network: true",
         "Connection: close",
         "", text,
     }, "\r\n"))

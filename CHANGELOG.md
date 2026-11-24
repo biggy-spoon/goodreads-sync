@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.1.0-rc6 (unreleased)
+## 1.1.0-rc7 (unreleased)
+
+- Fixed the browser extension failing to reach the e-reader with "Could
+  not reach the e-reader" on Chrome, even with correct address/code and
+  both devices on the same network: Chrome's Private Network Access
+  check blocks a page/extension from fetching a local-network address
+  unless the server's preflight response includes
+  `Access-Control-Allow-Private-Network: true`. Added it to
+  `gr_cookie_receiver.lua`'s response headers.
+
+## 1.1.0-rc6
 
 - Fixed the cookie-receiver panel still appearing invisible after the
   self.dimen fix: the "Sign in from browser extension…" and "Sign in by
