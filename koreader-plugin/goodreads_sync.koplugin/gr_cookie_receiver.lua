@@ -55,13 +55,6 @@ local function localAddress()
     return nil
 end
 
-local function toggleKindleFirewall(port, open)
-    local Device = require("device")
-    if not Device:isKindle() then return end
-    local flag = open and "-A" or "-D"
-    os.execute(string.format("iptables %s INPUT -p tcp --dport %d -j ACCEPT 2>/dev/null", flag, port))
-end
-
 local function respond(client, status, reason, obj)
     local text = json.encode(obj)
     client:send(table.concat({
@@ -197,19 +190,18 @@ function Receiver.open(on_saved)
         code = state.code,
         status_text = server and _("Waiting for the cookie…") or _("Could not open a listening port."),
     }
-    if not server then
-        UIManager:show(widget)
-        UIManager:forceRePaint()
-        return widget
-    end
+    -- Shown before anything else below, so the panel (and the code the
+    -- reader needs to type) is on screen even if something after this
+    -- point goes wrong.
+    UIManager:show(widget)
+    UIManager:forceRePaint()
+    if not server then return widget end
     server:settimeout(0)
-    toggleKindleFirewall(port, true)
 
     local stopped = false
     local function stop()
         if stopped then return end
         stopped = true
-        toggleKindleFirewall(port, false)
         UIManager:unschedule(widget._poll)
         pcall(function() server:close() end)
     end
@@ -238,8 +230,6 @@ function Receiver.open(on_saved)
         stop()
     end)
 
-    UIManager:show(widget)
-    UIManager:forceRePaint()
     return widget
 end
 

@@ -1,6 +1,20 @@
 # Changelog
 
-## 1.1.0-rc3 (unreleased)
+## 1.1.0-rc4 (unreleased)
+
+- Fixed the cookie-receiver freezing KOReader entirely: `Receiver.open`
+  called a blocking `os.execute("iptables ...")` to open the Kindle's
+  firewall for the listening port, and ran it *before* showing the
+  panel. If that call hung on a given device (no `iptables` in PATH,
+  slow netfilter module load, etc.), the whole UI thread froze before
+  ever drawing anything — matching exactly what on-device testing showed
+  (port reachable via the OS's TCP backlog, panel never rendered).
+  Removed the firewall toggle entirely (unneeded on the tested device —
+  the port was reachable without it) and moved `UIManager:show()` to the
+  very first thing `Receiver.open` does, so the panel appears even if
+  something later goes wrong.
+
+## 1.1.0-rc3
 
 - Fixed the cookie-receiver panel not appearing until the next screen
   refresh (e.g. after a sleep/wake cycle): `Receiver.open` now calls
