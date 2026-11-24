@@ -179,7 +179,9 @@ end
 
 function ReceiverWidget:onStop()
     if self.on_close then self.on_close() end
-    UIManager:close(self)
+    -- "full" clears any e-ink ghosting the panel left behind, instead of
+    -- whatever lesser refresh UIManager would otherwise pick by default.
+    UIManager:close(self, "full")
     return true
 end
 

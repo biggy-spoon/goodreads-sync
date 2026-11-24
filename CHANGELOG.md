@@ -1,6 +1,14 @@
 # Changelog
 
-## 1.1.0-rc7 (unreleased)
+## 1.1.0-rc8 (unreleased)
+
+- Fixed the cookie-receiver panel leaving e-ink ghosting behind after
+  pressing Stop: `onStop` called `UIManager:close(self)` with no refresh
+  type, which lets UIManager pick its own (lesser) default. Passing
+  `"full"` forces a complete refresh that actually clears the panel's
+  afterimage.
+
+## 1.1.0-rc7
 
 - Fixed the browser extension failing to reach the e-reader with "Could
   not reach the e-reader" on Chrome, even with correct address/code and
