@@ -1,6 +1,15 @@
 # Changelog
 
-## 1.1.0-rc9 (unreleased)
+## 1.1.0-rc10 (unreleased)
+
+- Fixed the extension still being blocked by its own `connect-src`
+  policy after the rc9 fix: a CSP source expression that omits a port
+  matches only the scheme's *default* port (80 for `http:`), per the
+  CSP spec — so `http://*` matched nothing but port 80, silently
+  excluding the e-reader's port 8970. Added an explicit wildcard port
+  (`http://*:* https://*:*`). Browser-extension-only change.
+
+## 1.1.0-rc9
 
 - Fixed the browser extension failing with a CORS/network error on
   Firefox ("Content-Security-Policy: Upgrading insecure request...").
